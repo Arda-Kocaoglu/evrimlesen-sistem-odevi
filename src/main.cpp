@@ -74,16 +74,31 @@ public:
 };
 
 int main() {
-    OgrenciIndirimi ogrenci;
-
-    Sepet* sepet = new Sepet(500, &ogrenci);
-
-    // Decorator ekleme
-    sepet = new KargoDecorator(sepet);
-    sepet = new VergiDecorator(sepet);
+    SepetFacade facade;
 
     cout << "Toplam Tutar: "
-         << sepet->toplamHesapla() << endl;
+         << facade.hesapla(500, "ogrenci") << endl;
 
     return 0;
 }
+
+class SepetFacade {
+public:
+    double hesapla(double tutar, string indirimTipi) {
+        IndirimStrategy* strategy;
+
+        if (indirimTipi == "ogrenci") {
+            strategy = new OgrenciIndirimi();
+        } else {
+            strategy = new Yuzde20Indirimi();
+        }
+
+        Sepet* sepet = new Sepet(tutar, strategy);
+
+        sepet = new KargoDecorator(sepet);
+        sepet = new VergiDecorator(sepet);
+
+        return sepet->toplamHesapla();
+    }
+};
+
