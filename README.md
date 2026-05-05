@@ -94,6 +94,7 @@ classDiagram
 
 ## Proje Yapısı
 
+```text
 evrimlesen-sistem-odevi/
 ├── README.md
 ├── PATTERNS.md
@@ -108,3 +109,4 @@ evrimlesen-sistem-odevi/
 └── .github/
     └── workflows/
         └── ci.yml
+```
