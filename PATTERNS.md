@@ -17,6 +17,22 @@
 - Yeni indirim türü eklemek kolaylaştı.
 - Açık/Kapalı Prensibine daha uygun bir yapı oluştu.
 
+## Phase 1 Fix - Factory Method
+
+### Nerede Kullanıldı?
+
+İndirim nesnelerinin oluşturulması IndirimFactory sınıfı ile merkezi hale getirildi.
+
+### Neden Kullanıldı?
+
+Nesne oluşturma işlemini Sepet sınıfından ayırmak ve daha esnek bir yapı oluşturmak için kullanıldı.
+
+### Ne Kazandırdı?
+
+- Nesne oluşturma sorumluluğu ayrıldı.
+- Kod daha modüler hale geldi.
+- Yeni indirim türleri eklemek kolaylaştı.
+
 ## Phase 2 - Decorator Pattern
 
 ### Nerede Kullanıldı?
@@ -82,4 +98,5 @@ Sepet sınıfı, bildirim gönderme detaylarına doğrudan bağımlı olmadan fa
 - Bildirim sistemi esnek hale geldi.
 - Yeni bildirim türleri kolayca eklenebilir.
 - Sepet ile bildirim sistemi arasındaki bağımlılık azaldı.
+
 
