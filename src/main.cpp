@@ -1,10 +1,10 @@
 #include <iostream>
 using namespace std;
 
+// Strategy Pattern
 class IndirimStrategy {
 public:
     virtual double indirimUygula(double toplamTutar) = 0;
-    virtual ~IndirimStrategy() {}
 };
 
 class OgrenciIndirimi : public IndirimStrategy {
@@ -21,58 +21,84 @@ public:
     }
 };
 
-class Kupon50Indirimi : public IndirimStrategy {
-public:
-    double indirimUygula(double toplamTutar) override {
-        return toplamTutar - 50;
-    }
-};
-
-class IndirimFactory {
-public:
-    static IndirimStrategy* indirimOlustur(string indirimTipi) {
-        if (indirimTipi == "ogrenci") {
-            return new OgrenciIndirimi();
-        }
-        else if (indirimTipi == "yuzde20") {
-            return new Yuzde20Indirimi();
-        }
-        else if (indirimTipi == "kupon50") {
-            return new Kupon50Indirimi();
-        }
-        else {
-            return nullptr;
-        }
-    }
-};
-
+// Sepet sınıfı
 class Sepet {
-private:
+protected:
     double toplamTutar;
-    IndirimStrategy* indirimStrategy;
+    IndirimStrategy* strategy;
 
 public:
-    Sepet(double tutar, IndirimStrategy* strategy) {
+    Sepet(double tutar, IndirimStrategy* s) {
         toplamTutar = tutar;
-        indirimStrategy = strategy;
+        strategy = s;
     }
 
-    double indirimliTutarHesapla() {
-        return indirimStrategy->indirimUygula(toplamTutar);
+    virtual double toplamHesapla() {
+        return strategy->indirimUygula(toplamTutar);
+    }
+};
+
+// Decorator Base
+class SepetDecorator : public Sepet {
+protected:
+    Sepet* sepet;
+
+public:
+    SepetDecorator(Sepet* s) : Sepet(0, nullptr) {
+        sepet = s;
+    }
+
+    virtual double toplamHesapla() {
+        return sepet->toplamHesapla();
+    }
+};
+
+// Kargo Decorator
+class KargoDecorator : public SepetDecorator {
+public:
+    KargoDecorator(Sepet* s) : SepetDecorator(s) {}
+
+    double toplamHesapla() override {
+        return sepet->toplamHesapla() + 30;
+    }
+};
+
+// Vergi Decorator
+class VergiDecorator : public SepetDecorator {
+public:
+    VergiDecorator(Sepet* s) : SepetDecorator(s) {}
+
+    double toplamHesapla() override {
+        return sepet->toplamHesapla() * 1.18;
     }
 };
 
 int main() {
-    IndirimStrategy* indirim = IndirimFactory::indirimOlustur("ogrenci");
+    SepetFacade facade;
 
-    if (indirim != nullptr) {
-        Sepet sepet(500, indirim);
-
-        cout << "Indirimli Tutar: "
-             << sepet.indirimliTutarHesapla() << endl;
-
-        delete indirim;
-    }
+    cout << "Toplam Tutar: "
+         << facade.hesapla(500, "ogrenci") << endl;
 
     return 0;
 }
+
+class SepetFacade {
+public:
+    double hesapla(double tutar, string indirimTipi) {
+        IndirimStrategy* strategy;
+
+        if (indirimTipi == "ogrenci") {
+            strategy = new OgrenciIndirimi();
+        } else {
+            strategy = new Yuzde20Indirimi();
+        }
+
+        Sepet* sepet = new Sepet(tutar, strategy);
+
+        sepet = new KargoDecorator(sepet);
+        sepet = new VergiDecorator(sepet);
+
+        return sepet->toplamHesapla();
+    }
+};
+
