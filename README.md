@@ -23,11 +23,25 @@ Projeyi derlemek için:
 
 ```bash
 g++ src/main.cpp -o main
+```
+
+Çalıştırmak için:
+
+```bash
+./main
+```
+
+Windows üzerinde:
+
+```bash
+main.exe
+```
 
 ## Mimari Diyagram
 
 ```mermaid
 classDiagram
+
     class Sepet {
         -double toplamTutar
         +kargoEkle()
@@ -76,5 +90,17 @@ classDiagram
 
     Observer <|-- EmailObserver
     Sepet --> Observer
-    
+```
 
+## Proje Yapısı
+
+```
+README.md
+PATTERNS.md
+PROBLEMS.md
+src/main.cpp
+docs/ai-log/phase1.md
+docs/ai-log/phase2.md
+docs/ai-log/phase3.md
+.github/workflows/ci.yml
+```
