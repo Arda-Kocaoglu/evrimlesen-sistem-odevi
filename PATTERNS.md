@@ -50,3 +50,36 @@ Kullanıcının indirim, kargo ve vergi işlemlerini tek tek yönetmesi yerine t
 - Karmaşıklığı gizledi
 - Daha okunabilir bir yapı oluşturdu
 
+## Phase 3 - Command Pattern
+
+### Nerede Kullanıldı?
+
+Sepet üzerinde yapılacak işlemler komut sınıfları haline getirildi. Kargo ekleme ve vergi ekleme işlemleri ayrı komutlar olarak tanımlandı.
+
+### Neden Kullanıldı?
+
+Sepet işlemlerini doğrudan çağırmak yerine yönetilebilir komutlar haline getirmek istendi. Bu sayede yeni işlemler sisteme daha düzenli şekilde eklenebilir.
+
+### Ne Kazandırdı?
+
+- İşlemler ayrı sınıflara ayrıldı.
+- Yeni komut eklemek kolaylaştı.
+- Kod daha düzenli ve genişletilebilir hale geldi.
+
+
+## Phase 3 - Observer Pattern
+
+### Nerede Kullanıldı?
+
+Sepette bir işlem gerçekleştiğinde bildirim göndermek için kullanıldı.
+
+### Neden Kullanıldı?
+
+Sepet sınıfı, bildirim gönderme detaylarına doğrudan bağımlı olmadan farklı gözlemcilere haber verebilmelidir.
+
+### Ne Kazandırdı?
+
+- Bildirim sistemi esnek hale geldi.
+- Yeni bildirim türleri kolayca eklenebilir.
+- Sepet ile bildirim sistemi arasındaki bağımlılık azaldı.
+
