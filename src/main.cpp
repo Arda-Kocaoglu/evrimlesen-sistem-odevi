@@ -1,104 +1,123 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
-// Strategy Pattern
-class IndirimStrategy {
+// Observer Pattern
+class Observer {
 public:
-    virtual double indirimUygula(double toplamTutar) = 0;
+    virtual void bildirimGonder(string mesaj) = 0;
 };
 
-class OgrenciIndirimi : public IndirimStrategy {
+class EmailObserver : public Observer {
 public:
-    double indirimUygula(double toplamTutar) override {
-        return toplamTutar * 0.90;
-    }
-};
-
-class Yuzde20Indirimi : public IndirimStrategy {
-public:
-    double indirimUygula(double toplamTutar) override {
-        return toplamTutar * 0.80;
+    void bildirimGonder(string mesaj) override {
+        cout << "Email bildirimi: " << mesaj << endl;
     }
 };
 
 // Sepet sınıfı
 class Sepet {
-protected:
+private:
     double toplamTutar;
-    IndirimStrategy* strategy;
+    vector<Observer*> observers;
 
 public:
-    Sepet(double tutar, IndirimStrategy* s) {
+    Sepet(double tutar) {
         toplamTutar = tutar;
-        strategy = s;
     }
 
-    virtual double toplamHesapla() {
-        return strategy->indirimUygula(toplamTutar);
+    void observerEkle(Observer* observer) {
+        observers.push_back(observer);
+    }
+
+    void bildirimleriGonder(string mesaj) {
+        for (Observer* observer : observers) {
+            observer->bildirimGonder(mesaj);
+        }
+    }
+
+    void kargoEkle() {
+        toplamTutar += 30;
+        bildirimleriGonder("Kargo ucreti eklendi.");
+    }
+
+    void vergiEkle() {
+        toplamTutar *= 1.18;
+        bildirimleriGonder("Vergi uygulandi.");
+    }
+
+    double getToplamTutar() {
+        return toplamTutar;
     }
 };
 
-// Decorator Base
-class SepetDecorator : public Sepet {
-protected:
+// Command Pattern
+class Komut {
+public:
+    virtual void calistir() = 0;
+};
+
+class KargoEkleKomutu : public Komut {
+private:
     Sepet* sepet;
 
 public:
-    SepetDecorator(Sepet* s) : Sepet(0, nullptr) {
+    KargoEkleKomutu(Sepet* s) {
         sepet = s;
     }
 
-    virtual double toplamHesapla() {
-        return sepet->toplamHesapla();
+    void calistir() override {
+        sepet->kargoEkle();
     }
 };
 
-// Kargo Decorator
-class KargoDecorator : public SepetDecorator {
-public:
-    KargoDecorator(Sepet* s) : SepetDecorator(s) {}
+class VergiEkleKomutu : public Komut {
+private:
+    Sepet* sepet;
 
-    double toplamHesapla() override {
-        return sepet->toplamHesapla() + 30;
+public:
+    VergiEkleKomutu(Sepet* s) {
+        sepet = s;
+    }
+
+    void calistir() override {
+        sepet->vergiEkle();
     }
 };
 
-// Vergi Decorator
-class VergiDecorator : public SepetDecorator {
-public:
-    VergiDecorator(Sepet* s) : SepetDecorator(s) {}
+class SepetIslemYoneticisi {
+private:
+    vector<Komut*> komutlar;
 
-    double toplamHesapla() override {
-        return sepet->toplamHesapla() * 1.18;
+public:
+    void komutEkle(Komut* komut) {
+        komutlar.push_back(komut);
+    }
+
+    void komutlariCalistir() {
+        for (Komut* komut : komutlar) {
+            komut->calistir();
+        }
     }
 };
 
 int main() {
-    SepetFacade facade;
+    Sepet sepet(500);
 
-    cout << "Toplam Tutar: "
-         << facade.hesapla(500, "ogrenci") << endl;
+    EmailObserver emailObserver;
+    sepet.observerEkle(&emailObserver);
+
+    KargoEkleKomutu kargoKomutu(&sepet);
+    VergiEkleKomutu vergiKomutu(&sepet);
+
+    SepetIslemYoneticisi yonetici;
+    yonetici.komutEkle(&kargoKomutu);
+    yonetici.komutEkle(&vergiKomutu);
+
+    yonetici.komutlariCalistir();
+
+    cout << "Son toplam tutar: "
+         << sepet.getToplamTutar() << endl;
 
     return 0;
 }
-
-class SepetFacade {
-public:
-    double hesapla(double tutar, string indirimTipi) {
-        IndirimStrategy* strategy;
-
-        if (indirimTipi == "ogrenci") {
-            strategy = new OgrenciIndirimi();
-        } else {
-            strategy = new Yuzde20Indirimi();
-        }
-
-        Sepet* sepet = new Sepet(tutar, strategy);
-
-        sepet = new KargoDecorator(sepet);
-        sepet = new VergiDecorator(sepet);
-
-        return sepet->toplamHesapla();
-    }
-};
-
