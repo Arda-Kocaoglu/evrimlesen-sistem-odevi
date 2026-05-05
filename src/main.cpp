@@ -28,6 +28,24 @@ public:
     }
 };
 
+class IndirimFactory {
+public:
+    static IndirimStrategy* indirimOlustur(string indirimTipi) {
+        if (indirimTipi == "ogrenci") {
+            return new OgrenciIndirimi();
+        }
+        else if (indirimTipi == "yuzde20") {
+            return new Yuzde20Indirimi();
+        }
+        else if (indirimTipi == "kupon50") {
+            return new Kupon50Indirimi();
+        }
+        else {
+            return nullptr;
+        }
+    }
+};
+
 class Sepet {
 private:
     double toplamTutar;
@@ -45,11 +63,16 @@ public:
 };
 
 int main() {
-    OgrenciIndirimi ogrenciIndirimi;
-    Sepet sepet(500, &ogrenciIndirimi);
+    IndirimStrategy* indirim = IndirimFactory::indirimOlustur("ogrenci");
 
-    cout << "Indirimli Tutar: "
-         << sepet.indirimliTutarHesapla() << endl;
+    if (indirim != nullptr) {
+        Sepet sepet(500, indirim);
+
+        cout << "Indirimli Tutar: "
+             << sepet.indirimliTutarHesapla() << endl;
+
+        delete indirim;
+    }
 
     return 0;
 }
