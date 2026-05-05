@@ -94,13 +94,17 @@ classDiagram
 
 ## Proje Yapısı
 
-```
-README.md
-PATTERNS.md
-PROBLEMS.md
-src/main.cpp
-docs/ai-log/phase1.md
-docs/ai-log/phase2.md
-docs/ai-log/phase3.md
-.github/workflows/ci.yml
-```
+evrimlesen-sistem-odevi/
+├── README.md
+├── PATTERNS.md
+├── PROBLEMS.md
+├── src/
+│   └── main.cpp
+├── docs/
+│   └── ai-log/
+│       ├── phase1.md
+│       ├── phase2.md
+│       └── phase3.md
+└── .github/
+    └── workflows/
+        └── ci.yml
