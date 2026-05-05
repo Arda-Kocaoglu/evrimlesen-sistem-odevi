@@ -1,0 +1,23 @@
+name: C++ CI
+
+on:
+  push:
+    branches: [ main, phase-3 ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build C++ project
+        run: g++ src/main.cpp -o main
+
+      - name: Run program
+        run: ./main
+
+        
