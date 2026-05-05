@@ -1,39 +1,55 @@
 #include <iostream>
 using namespace std;
 
-class Sepet {
+class IndirimStrategy {
 public:
-    double toplamTutar;
+    virtual double indirimUygula(double toplamTutar) = 0;
+    virtual ~IndirimStrategy() {}
+};
 
-    Sepet(double tutar) {
+class OgrenciIndirimi : public IndirimStrategy {
+public:
+    double indirimUygula(double toplamTutar) override {
+        return toplamTutar * 0.90;
+    }
+};
+
+class Yuzde20Indirimi : public IndirimStrategy {
+public:
+    double indirimUygula(double toplamTutar) override {
+        return toplamTutar * 0.80;
+    }
+};
+
+class Kupon50Indirimi : public IndirimStrategy {
+public:
+    double indirimUygula(double toplamTutar) override {
+        return toplamTutar - 50;
+    }
+};
+
+class Sepet {
+private:
+    double toplamTutar;
+    IndirimStrategy* indirimStrategy;
+
+public:
+    Sepet(double tutar, IndirimStrategy* strategy) {
         toplamTutar = tutar;
+        indirimStrategy = strategy;
     }
 
-    double indirimUygula(string indirimTipi) {
-        double indirimliTutar = toplamTutar;
-
-        if (indirimTipi == "ogrenci") {
-            indirimliTutar = toplamTutar * 0.90;
-        }
-        else if (indirimTipi == "yuzde20") {
-            indirimliTutar = toplamTutar * 0.80;
-        }
-        else if (indirimTipi == "kupon50") {
-            indirimliTutar = toplamTutar - 50;
-        }
-        else {
-            cout << "Indirim yok" << endl;
-        }
-
-        return indirimliTutar;
+    double indirimliTutarHesapla() {
+        return indirimStrategy->indirimUygula(toplamTutar);
     }
 };
 
 int main() {
-    Sepet sepet(500);
+    OgrenciIndirimi ogrenciIndirimi;
+    Sepet sepet(500, &ogrenciIndirimi);
 
     cout << "Indirimli Tutar: "
-         << sepet.indirimUygula("ogrenci") << endl;
+         << sepet.indirimliTutarHesapla() << endl;
 
     return 0;
 }
