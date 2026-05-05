@@ -24,3 +24,57 @@ Projeyi derlemek için:
 ```bash
 g++ src/main.cpp -o main
 
+## Mimari Diyagram
+
+```mermaid
+classDiagram
+    class Sepet {
+        -double toplamTutar
+        +kargoEkle()
+        +vergiEkle()
+        +getToplamTutar()
+    }
+
+    class IndirimStrategy {
+        <<interface>>
+        +indirimUygula(double)
+    }
+
+    class OgrenciIndirimi
+    class Yuzde20Indirimi
+    class Kupon50Indirimi
+
+    class SepetDecorator
+    class KargoDecorator
+    class VergiDecorator
+
+    class Komut {
+        <<interface>>
+        +calistir()
+    }
+
+    class KargoEkleKomutu
+    class VergiEkleKomutu
+
+    class Observer {
+        <<interface>>
+        +bildirimGonder(string)
+    }
+
+    class EmailObserver
+
+    IndirimStrategy <|-- OgrenciIndirimi
+    IndirimStrategy <|-- Yuzde20Indirimi
+    IndirimStrategy <|-- Kupon50Indirimi
+
+    Sepet <|-- SepetDecorator
+    SepetDecorator <|-- KargoDecorator
+    SepetDecorator <|-- VergiDecorator
+
+    Komut <|-- KargoEkleKomutu
+    Komut <|-- VergiEkleKomutu
+
+    Observer <|-- EmailObserver
+    Sepet --> Observer
+    
+
