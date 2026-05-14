@@ -8,13 +8,26 @@ Bu konuyu seçmemin sebebi, indirim sistemlerinin gerçek hayatta sık kullanıl
 
 Bu proje, e-ticaret sepeti üzerinde farklı tasarım örüntülerini uygulayarak sistemin zamanla nasıl daha esnek ve genişletilebilir hale getirilebileceğini göstermektedir.
 
+## Sistem Nasıl Çalışır?
+
+Kullanıcı sepet oluşturur ve indirim türünü seçer.  
+Seçilen indirim Strategy Pattern ile uygulanır.
+
+Daha sonra Decorator Pattern ile kargo ve vergi gibi ek işlemler sepete eklenir.
+
+Command Pattern ile bu işlemler yönetilir ve sıralı şekilde uygulanır.
+
+Observer Pattern ile sepet üzerinde yapılan işlemler sonrası kullanıcıya bildirim gönderilir.
+
+Bu yapı sayesinde sistem yeni özelliklere açık hale getirilmiştir.
+
 ## Kullanılan Tasarım Örüntüleri
 
 - Factory Method: İndirim nesnelerinin oluşturulmasını merkezi hale getirmek için kullanıldı.
 - Strategy Pattern: İndirim hesaplama davranışlarını ayrı sınıflara ayırmak için kullanıldı.
 - Decorator Pattern: Sepete kargo ve vergi gibi ek özellikler eklemek için kullanıldı.
 - Facade Pattern: Sistemin dışarıdan daha kolay kullanılmasını sağlamak için kullanıldı.
-- Command Pattern: Sepet işlemlerini komut sınıfları haline getirmek için kullanıldı.
+- Command Pattern: Sepet işlemlerini komut sınıflarına ayırmak için kullanıldı.
 - Observer Pattern: Sepette işlem gerçekleştiğinde bildirim göndermek için kullanıldı.
 
 ## Nasıl Çalıştırılır?
@@ -35,6 +48,14 @@ Windows üzerinde:
 
 ```bash
 main.exe
+```
+
+### Örnek Çıktı
+
+```text
+Email bildirimi: Kargo ucreti eklendi.
+Email bildirimi: Vergi uygulandi.
+Son toplam tutar: 625.4
 ```
 
 ## Mimari Diyagram
